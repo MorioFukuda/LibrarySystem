@@ -28,32 +28,32 @@ library-system-vh.conf
 
 [vh.conf]
 
-     NameVirtualHost *:80
-     SetEnvIf Remote_Addr "^(220\.110\.139\.200|219\.118\.174\.241)$"   voyage_access
+    NameVirtualHost *:80
 
 [staff-vh.conf]
 
-     <VirtualHost _default_:80>
-          DocumentRoot     /web/staff.library-system
-          ServerName     staff.library-system.local
-          ErrorLog     "/var/log/httpd/staff_vh_error_log"
-     </VirtualHost>
+    <VirtualHost _default_:80>
+         DocumentRoot     /web/staff.library-system/web
+         ServerName     staff.library-system.local
+         ErrorLog     "/var/log/httpd/staff_vh_error_log"
+    </VirtualHost>
 
-     <Directory "/web/staff.library-system">
-          AllowOverride All
-          Order deny,allow
-          deny from all
-          allow from env=voyage_access
-          allow from 127.0.0.1
-          allow from 192.168.56.1
-     </Directory>
+    <Directory "/web/staff.library-system/web">
+         AllowOverride All
+         Order deny,allow
+         deny from all
+         allow from 127.0.0.1
+         allow from 192.168.56.1
+    </Directory>
 
 [library-system-vh.conf]
 
-     <VirtualHost _default_:80>
-          DocumentRoot     /web/library-system
-          ServerName     library-system.local
-          ErrorLog     "/var/log/httpd/library-system_vh_error_log"
-     </VirtualHost>
+    <VirtualHost _default_:80>
+         DocumentRoot     /web/library-system/web
+         ServerName     library-system.local
+         ErrorLog     "/var/log/httpd/library-system_vh_error_log"
+    </VirtualHost>
  
-
+    <Directory "/web/library-system/web">
+        AllowOverride All
+    </Directory>
