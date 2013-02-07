@@ -44,12 +44,12 @@ abstract class Application
 
 	abstract protected function registerRoutes();
 
-	public function isDebugMode();
+	public function isDebugMode()
 	{
 		return $this->debug;
 	}
 
-	public function getRequest();
+	public function getRequest()
 	{
 		return $this->request;
 	}
@@ -103,6 +103,9 @@ abstract class Application
 			$this->runAction($controller, $action, $params);
 		}catch(HttpNotFoundException $e){
 			$this->render404Page($e);
+		}catch(UnauthorizedActionException $e){
+			list($controller, $action) = $this->login_action;
+			$this->runAction($controller, $action);
 		}
 
 		$this->response->send();
