@@ -2,7 +2,7 @@
 
 class CalisisApplication extends Application
 {
-	protected $login_action = array('account', 'signin');
+	protected $login_action = array('user', 'signin');
 
 	public function getRootDir()
 	{
