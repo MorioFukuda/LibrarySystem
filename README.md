@@ -57,3 +57,6 @@ library-system-vh.conf
     <Directory "/web/library-system/web">
         AllowOverride All
     </Directory>
+
+#php.iniに以下を設定
+    date.timezone = Asia/Tokyo

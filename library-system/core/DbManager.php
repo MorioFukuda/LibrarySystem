@@ -2,81 +2,79 @@
 
 class DbManager
 {
+    protected $connections = array();
+    protected $repository_connection_map = array();
+    protected $repositories = array();
 
-	protected $connections = array();
-	protected $repository_connection_map = array();
-	protected $repositories = array();
+    public function connect($name, $params)
+    {
+        $params = array_merge(array(
+            'dsn'      => null,
+            'user'     => '',
+            'password' => '',
+            'options'  => array(),
+        ), $params);
 
-	public function __destruct()
-	{
-		foreach($this->repositories as $repository){
-			unset($repository);
-		}
+        $con = new PDO(
+            $params['dsn'],
+            $params['user'],
+            $params['password'],
+            $params['options']
+        );
 
-		foreach($this->connections as $con){
-			unset($con);
-		}
-	}
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	public function connect($name, $params)
-	{
-		$params = array_merge(array(
-			'dsn' => null,
-			'user' => '',
-			'password' => '',
-			'options' => array(),
-		), $params);
+        $this->connections[$name] = $con;
+    }
 
-		$con = new PDO(
-			$params['dsn'],
-			$params['user'],
-			$params['password'],
-			$params['options']
-		);
+    public function getConnection($name = null)
+    {
+        if (is_null($name)) {
+            return current($this->connections);
+        }
 
-		$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $this->connections[$name];
+    }
 
-		$this->connections[$name] = $con;
-	}
+    public function setRepositoryConnectionMap($repository_name, $name)
+    {
+        $this->repository_connection_map[$repository_name] = $name;
+    }
 
-	public function getConnection($name = null)
-	{
-		// もし、名前の指定がされていなかったら、$this->connections配列の内部ポインタが示す値を取得して返す
-		if(is_null($name)){
-			return current($this->connections);
-		}
+    public function getConnectionForRepository($repository_name)
+    {
+        if (isset($this->repository_connection_map[$repository_name])) {
+            $name = $this->repository_connection_map[$repository_name];
+            $con = $this->getConnection($name);
+        } else {
+            $con = $this->getConnection();
+        }
 
-		return $this->connections[$name];
-	}
+        return $con;
+    }
 
-	public function setRepositoryConnectionMap($repository_name, $name)
-	{
-		$this->repository_connection_map[$repository_name] = $name;
-	}
+    public function get($repository_name)
+    {
+        if (!isset($this->repositories[$repository_name])) {
+            $repository_class = $repository_name . 'Repository';
+            $con = $this->getConnectionForRepository($repository_name);
 
-	public function getConnectionForRepository($repository_name)
-	{
-		if(isset($this->repository_connection_map[$repository_name])){
-			$name = $this->repository_connection_map[$repository_name];
-			$con = $this->getConnection($name);
-		}else{
-			$con = $this->getConnection();
-		}
+            $repository = new $repository_class($con);
 
-		return $con;
-	}
+            $this->repositories[$repository_name] = $repository;
+        }
 
-	public function get($repository_name)
-	{
-		if(!isset($this->repositories[$repositorie_name])){
-			$repository_class = $repository_name . 'Repository';
-			$con = $this->getConnectionForRepository($repository_name);
+        return $this->repositories[$repository_name];
+    }
 
-			$repository = new $repository_class($con);
+    public function __destruct()
+    {
+        foreach ($this->repositories as $repository) {
+            unset($repository);
+        }
 
-			$this->repositories[$repository_name] = $repository;
-		}
-
-		return $this->repositories[$repository_name];
-	}
+        foreach ($this->connections as $con) {
+            unset($con);
+        }
+    }
 }
