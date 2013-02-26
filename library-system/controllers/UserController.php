@@ -61,7 +61,7 @@ class UserController extends Controller
 		$unverifiedUser = $this->db_manager->get('UnverifiedUser')->fetchByEmail($email);
 
 		$now = strtotime('now');
-		$limitTime = strtotime($unverifiedUser['created_at']) + 60;
+		$limitTime = strtotime($unverifiedUser['created_at']) + 60 * 60;
 
 		$error = '';
 		if($unverifiedUser === false || $token !== $unverifiedUser['token']){
