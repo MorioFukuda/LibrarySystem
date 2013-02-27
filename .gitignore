@@ -1,4 +1,4 @@
 .*
 !.git*
 !.htaccess
-/media
+/library-system/web/media/
