@@ -24,8 +24,9 @@ class BookRepository extends BaseRepository
 			$errors[] = '正しくないURLです。';
 		}
 
-		$bookId = '';
+		$bookImageId = '';
 
+		// 画像がアップロードされている場合
 		if(!empty($bookImage['type'])){
 			if($this->validateImageFile($bookImage) !== true && count($errors) === 0){
 				$errors[] = $this->validateImageFile($bookImage);
@@ -35,19 +36,46 @@ class BookRepository extends BaseRepository
 				$type = str_replace(array(1, 2, 3), array('.gif', '.jpg', '.png'), $type);
 
 				$dir = dirname(__FILE__) . '/../web/media/';
-				$fileName = hash_file('sha256', $bookImage['tmp_name']);
-				$path = $dir . $fileName . $type;
+				$fileName = hash_file('sha256', $bookImage['tmp_name']) . $type;
+				$path = $dir . $fileName;
 
 				if(!file_exists($path)){
+					// 同じ画像が存在しなければ、画像を保存し、book_imageテーブルにパスとかを格納
 					move_uploaded_file($bookImage['tmp_name'], $path);
-					// book_imageテーブルに、path,type,width,heightを格納し、idを$bookIdに格納
+					
+					$sql = "
+						INSERT INTO book_image(name, width, height)
+						VALUES(:name, :width, :height)
+					";
+					
+					$this->execute($sql, array(
+						':name' => $fileName,
+						':width' => $width,
+						':height' => $height,
+					));
+
+					$imageId = $this->getInsertId();
 				}else{
-					// 画像に対応したbook_imageテーブルのidを探す。
+					// 同じ画像があれば、画像に対応したbook_imageテーブルのidを探す。
+					$sql = "SELECT id FROM book_image WHERE name = :name";
+					$row = $this->fetch($sql, array(':name' => $fileName));
+					$imageId = $row['id'];
 				}
 			}
 		}
 
 		if(count($errors) === 0){
+			$sql = "
+				INSERT INTO book(isbn, title, shelf_id, image_id, amazon_url)
+				VALUES(:isbn, :title, :shelf_id, :image_id, :amazon_url)
+			";
+			$stmt = $this->execute($sql, array(
+				':isbn' => $isbn,
+				':title' => $title,
+				':shelf_id' => $shelfId,
+				':image_id' => $imageId,
+				':amazon_url' => $amazonUrl,
+			));
 			return array(true, $errors);
 		}
 
@@ -56,8 +84,8 @@ class BookRepository extends BaseRepository
 
 	public function validateShelfId($shelfId)
 	{
-		if(!preg_match('/^[0-9a-zA-Z]+/', $shelfId)){
-			return '棚番号は半角英数で入力してください。';
+		if(!preg_match('/^[0-9a-zA-Z-]+/', $shelfId)){
+			return '棚番号は半角英数とハイフンで入力してください。';
 		}
 
 		//TODO : shelfテーブルに存在するかのチェック

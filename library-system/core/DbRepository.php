@@ -31,4 +31,9 @@ abstract class DbRepository
     {
         return $this->execute($sql, $params)->fetchAll(PDO::FETCH_ASSOC);
     }
+
+		public function getInsertId()
+		{
+			return $this->con->lastInsertId();
+		}
 }

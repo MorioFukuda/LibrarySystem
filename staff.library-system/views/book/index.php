@@ -18,4 +18,3 @@
 	<input type="submit" value="登録" />
 </form>
 
-<?php var_dump($dir) ?>

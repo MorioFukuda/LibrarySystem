@@ -38,8 +38,6 @@ class BookController extends Controller
 			'shelfId' => $shelfId,
 			'amazonUrl' => $amazonUrl,
 			'errors' => $errors,
-			'bookImage' => $bookImage,
-			'dir' => dirname(__FILE__),
 			'_token' => $this->generateCsrfToken('book/index')
 		), 'index');
 	}
