@@ -7,9 +7,9 @@ class UnverifiedUserRepository extends BaseRepository
 
 		$errors = array();
 
-		if(empty($name)) $errors[] = 'ニックネームを入力してください';
+		if(empty($name)) $errors[] = 'ニックネームを入力してください。';
 		if(empty($email)) $errors[] = 'メールアドレスを入力してください。';
-		if(empty($password)) $errors[] = 'パスワードを入力してください';
+		if(empty($password)) $errors[] = 'パスワードを入力してください。';
 
 		if(!preg_match("/^[a-zA-Z0-9\.\-\_]+@[a-zA-Z0-9\.\-\_]+$/", $email) && count($errors) === 0){
 			$errors[] = '不正なメールアドレスです。';

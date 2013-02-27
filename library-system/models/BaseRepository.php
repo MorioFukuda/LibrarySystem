@@ -24,4 +24,19 @@ class BaseRepository extends DbRepository
 
 		return $hashedPassword;
 	}
+
+	public function validateIsbn($isbn)
+	{
+
+		if(!preg_match("/^[0-9]+$/", $isbn)){
+			return 'ISBNは、ハイフンを除いた半角数字で入力してください。';
+		}
+
+		if(strlen($isbn) !== 10 && strlen($isbn) !== 13){
+			return '正しくないISBN番号です。';
+		}
+
+		return true;
+	}
+
 }

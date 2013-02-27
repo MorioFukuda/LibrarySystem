@@ -29,6 +29,15 @@ class Request
         return $default;
     }
 
+		public function getFiles($name, $default = null)
+		{
+			if(isset($_FILES[$name])){
+				return $_FILES[$name];
+			}
+
+			return $default;
+		}
+
     public function getHost()
     {
         if (!empty($_SERVER['HTTP_HOST'])) {

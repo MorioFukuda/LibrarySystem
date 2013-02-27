@@ -2,7 +2,7 @@
 
 class StaffCalisisApplication extends Application
 {
-	protected $login_action = array('user', 'signin');
+	protected $login_action = array('admin', 'signin');
 
 	public function getRootDir()
 	{
@@ -12,6 +12,10 @@ class StaffCalisisApplication extends Application
 	protected function registerRoutes()
 	{
 		return array(
+			'/book'
+				=> array('controller' => 'book', 'action' => 'index'),
+			'/book/:action'
+				=> array('controller' => 'book'),
 		);
 	}
 
