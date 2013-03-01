@@ -20,6 +20,8 @@ class BookRepository extends BaseRepository
 			$errors[] = $this->validateShelfId($shelfId);
 		}
 
+		//TODO : $shelfIdに対応するshelfテーブルのidを格納する
+
 		if(!preg_match('/(https?:\/\/)([-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/', $amazonUrl) && count($errors) === 0){
 			$errors[] = '正しくないURLです。';
 		}
@@ -87,8 +89,6 @@ class BookRepository extends BaseRepository
 		if(!preg_match('/^[0-9a-zA-Z-]+/', $shelfId)){
 			return '棚番号は半角英数とハイフンで入力してください。';
 		}
-
-		//TODO : shelfテーブルに存在するかのチェック
 
 		return true;
 	}
