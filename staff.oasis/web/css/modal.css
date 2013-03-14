@@ -1,0 +1,16 @@
+div#modal{
+	margin: 30px;
+}
+
+div.book_detail dl{
+	clear: both;
+}
+div.book_detail dl dt{
+	float: left;
+	width: 4em;
+	clear: both;
+}
+div.book_detail dl dd{
+	margin: 0;
+	padding-left: 7em;
+}

@@ -68,7 +68,7 @@ $object__container: -container;
 
 // ------------ Column
 $object__column: -col;
-$object__column-quantity: 12;
+$object__column-quantity: 10;
 $object__column-width: 70px;
 $object__column-offset: #{$object__column}-offset;
 $object__column__gutter-width: 30px;
@@ -304,7 +304,7 @@ $mod__status-shadow:					none							'0 4px 10px rgba(0,0,0,.3)'		'0 4px 10px rgb
 
 // ------------- Status
 $mod__size:			tiny		small		default		big			huge;
-$mod__size-delta:	-4 			-2 			2 			4 			6;
+$mod__size-delta:	-4 			-2 			2 			4 			8;
 
 
 $mod__active: _active_;

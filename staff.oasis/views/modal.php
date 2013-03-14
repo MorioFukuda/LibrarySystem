@@ -11,7 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/maxmertkit-components.css">
 	<link rel="stylesheet" type="text/css" href="/css/maxmertkit-animation.css">
 	<link rel="stylesheet" type="text/css" href="/css/shadow.css">
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/css/modal.css">
 	<script type="text/javascript" src="/js/libs/html5shiv.js"></script>
 	<script type="text/javascript" src="/js/libs/jquery.js"></script>
 	<script type="text/javascript" src="/js/libs/easing.js"></script>
@@ -31,21 +31,8 @@
 
 </head>
 <body>
-
-<div id="main_container" class="effect7">
-	<div id="header">
-		<div id="navi">
-			<a href="<?php echo $base_url?>/book/search" class="js-tooltip" data-content='本を探す'><img src="/img/common/icon/search_1.png" class="rollover" alt="本を探す"></a>
-			<a href="<?php echo $base_url?>/book/inputByIsbn" class="js-tooltip" data-content='本の登録'><img src="/img/common/icon/input_1.png" class="rollover"></a>
-			<a href="<?php echo $base_url?>/book/inputShelfMulti" class="js-tooltip" data-content='本の移動'><img src="/img/common/icon/move_1.png" class="rollover"></a>
-			<a href="<?php echo $base_url?>/book/logout" class="js-tooltip" data-content='ログアウト'><img src="/img/common/icon/logout_1.png" class="rollover"></a>
-		<!-- /div#navi --></div>
-	<!-- /div#header --></div>
-	<div id="contents_container">
-		<h1 class="title"><img src="/img/common/line.png" class="line"><?php if(isset($title)): echo $this->h($title); endif; ?><img src="/img/common/line.png" class="line"></h1>
-		<?php echo $_content; ?>
-	<!-- /div#contents_container --></div>
-<!-- /div#main_container --></div>
-
+<div id="modal">
+	<?php echo $_content ?>
+</div>
 </body>
 </html>

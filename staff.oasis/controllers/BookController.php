@@ -246,13 +246,13 @@ class BookController extends Controller
 			'bookData' => $bookData,
 			'shelfName' => $shelfName,
 			'_token' => $this->generateCsrfToken('book/inputShelf'),
-		), 'inputShelf');
+		), 'inputShelf', 'modal');
 	}
 
 	public function setShelfAction()
 	{
 		if(!$this->request->isPost()){
-			return $this->render(array(),'error');
+			return $this->redirect('/book/inputShelf');
 		}
 
 		$token = $this->request->getPost('_token');
@@ -373,8 +373,63 @@ class BookController extends Controller
 	public function inputShelfMultiAction()
 	{
 		return $this->render(array(
-		
+			'shelfName' => '',
+			'_token' => $this->generateCsrfToken('book/inputShelfMulti'),
 		), 'inputShelfMulti');
+	}
+
+	public function setShelfMultiAction()
+	{
+		if(!$this->request->isPost()){
+			return $this->redirect('/book/inputShelfMulti');
+		}
+
+		$token = $this->request->getPost('_token');
+		if(!$this->checkCsrfToken('book/inputShelfMulti', $token)){
+			return $this->render(array(),'error');
+		}
+
+		$bookIdList = $this->request->getPost('book_id');
+		$shelfName = $this->request->getPost('shelf_name');
+
+		$variables = array(
+			'error' => '',
+			'shelfName' => $shelfName,
+			'_token' => $this->generateCsrfToken('book/inputShelfMulti'),
+		);
+
+		if(count($bookIdList) === 0){
+			$variables['error'] = '書籍を指定してください。';
+			return $this->render($variables, 'inputShelfMulti');
+		}
+
+		if($this->db_manager->get('Book')->hasEmpty($shelfName)){
+			$variables['error'] = '棚番号を入力してください。';
+			return $this->render($variables, 'inputShelfMulti');
+		}
+
+		if(!$this->db_manager->get('Book')->validateIdList($bookIdList)){
+			$variables['error'] = '不正な書籍IDです。';
+			return $this->render($variables, 'inputShelfMulti');
+		}
+
+		list($result, $shelfId) = $this->db_manager->get('Book')->validateShelfName($shelfName);
+		if($result === false){
+			$variables['error'] = '正しくない棚番号です。';
+			return $this->render($variables, 'inputShelfMulti');
+		}
+
+		$bookDataList = array();
+
+		foreach($bookIdList as $bookId){
+			$this->db_manager->get('Book')->updateShelfId($bookId, $shelfId);
+			$bookDataList[] = $this->db_manager->get('Book')->fetchById($bookId);
+		}
+
+		return $this->render(array(
+			'bookDataList' => $bookDataList,
+			'shelfName' => $shelfName
+		), 'completeSetShelfMulti');
 	}
 
 }

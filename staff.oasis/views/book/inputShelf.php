@@ -1,12 +1,17 @@
-<h2>棚番号変更</h2>
+<h1 class="modal"><img src="/img/common/icon/mini_move.png">棚を変更変更</h1>
 <?php if(isset($error) && !empty($error)): ?>
 <?php echo $this->h($error) ?>
 <?php endif; ?>
-<ul>
-<li>書籍名：<a href="<?php echo $this->h($bookData['amazon_url']) ?>" target="_blank"><?php echo $this->h($bookData['title']) ?></a></li>
-<li>著者：<?php echo $this->h($bookData['author']) ?></li>
-<li><img src="<?php echo $this->h($bookData['image_url'])?>" />
-</ul>
+
+<div class="book_detail">
+<img src="<?php echo $this->h($bookData['image_url'])?>" />
+<dl>
+	<dt>著者</dt>
+	<dd><?php echo $this->h($bookData['author']) ?></dd>
+	<dt>書籍名</dt>
+	<dd><a href="<?php echo $this->h($bookData['amazon_url']) ?>" target="_blank"><?php echo $this->h($bookData['title']) ?></a></dd>
+</dl>
+</div>
 
 <form action="<?php echo $base_url ?>/book/setShelf" method="post">
 	<input type="hidden" name="_token" value="<?php echo $this->h($_token) ?>" />

@@ -1,11 +1,34 @@
 $(function(){
-	
+
+	//--------------------------------------
+	// 共通
+	//--------------------------------------
+	$("img.rollover")
+		.mouseover(function(){
+			$(this).attr("src", $(this).attr("src").replace("_1", "_2"));
+		})
+		.mouseout(function(){
+			$(this).attr("src", $(this).attr("src").replace("_2", "_1"));
+		}
+	);
+
 	$('img#loading').bind("ajaxSend", function(){
 		$(this).fadeIn();
 	}).bind("ajaxComplete", function(){
 		$(this).fadeOut();
 	});
  
+	$(".js-tooltip").popup({
+		trigger: 'hover',
+		animation: 'growUp',
+		animationDuration: 400,
+		theme: 'dark',
+		placement: 'top',
+		offset: [-30, 0],
+		template: ' <div class="-tooltip _huge" style="padding:20px 40px;"> <i class="-arrow"></i> <div class="js-content"></div> </div>'
+	});
+
+
 	//--------------------------------------
 	// 本棚一括変更ページ
 	//--------------------------------------
@@ -20,12 +43,13 @@ $(function(){
 				url: 'http://staff.oasis.local/book/getBookList?query=' + query,
 				type: 'GET',
 				dataType: 'json',
+				cache : false,
 				beforeSend:function(){},
 				complete: function(){},
 
 				success: function(response){
 					$.each(response.bookList, function(i, book){
-						$('select#candidate_list').append('<option value="' + book.id + '" selected>' + book.title + '</option>');
+						$('select#candidate_list').append('<option value="' + book.id + '" selected>【' + book.shelf_name + '】' + book.title + '</option>');
 					});
 				},
 
@@ -40,7 +64,21 @@ $(function(){
 		$.each($('select#candidate_list > option:selected'), function(){
 			id = $(this).val();
 			title = $(this).text();
-			$('select#book_list').append('<option value="' + id +'" selected>' + title + '</option>');
+
+			// 既にリストに追加してあるものは追加しない
+			canAdd = true;
+			$.each($('form > input[type="hidden"]'), function(){
+				if($(this).val() == id){
+					canAdd =false;
+
+					return false;	// $.eachのbreak
+				}
+			});
+
+			if(canAdd){
+				$('select#book_list').append('<option value="' + id +'" selected>' + title + '</option>');
+				$('form').append('<input type="hidden" name="book_id[]" value="' + id + '" />');
+			}
 
 		});
 	});
@@ -48,8 +86,7 @@ $(function(){
 	$('input#remove_list').click(function(){
 		$.each($('select#book_list > option:selected'), function(){
 			id = $(this).val();
-			title = $(this).text();
-			alert(id + '/' + title);
+			$('form > input[value="' + id + '"]').remove();
 			$(this).remove();
 		});
 	});

@@ -90,6 +90,13 @@ class BookRepository extends BaseRepository
 		return $limit;
 	}
 
+	public function validateIdList($idList){
+		foreach($idList as $id){
+			if(!is_int((int)$id)) return false;
+		}
+		return true;
+	}
+
 //-----------------------------------------------------
 // PDO
 //-----------------------------------------------------
@@ -214,8 +221,8 @@ class BookRepository extends BaseRepository
 
 		// ページングした検索結果を取得するためのSQL
 		$select = "
-			SELECT
-				b.id, isbn, title, author, amazon_url, shelf_name, image_url, status, deleted
+			SELECT SQL_NO_CACHE
+				shelf_id, b.id, isbn, title, author, amazon_url, shelf_name, image_url, status, deleted
 		";
 
 		$limit = "";
