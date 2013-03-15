@@ -316,23 +316,8 @@ class BookController extends Controller
 
 	public function searchAction()
 	{
-		// POSTメソッドの場合
 		if($this->request->isPost()){
-			$query = $this->request->getPost('query');
-			$condition = $this->request->getPost('condition');
-			$limit = $this->request->getPost('limit');
-
-			if($this->db_manager->get('Book')->hasEmpty($query, $condition, $limit)){
-				return $this->render(array(
-					'query' => '',
-				), 'search');
-			}
-
-			if($this->db_manager->get('Book')->hasEmpty($condition)){
-				$condition = 'AND';
-			}
-
-			return $this->redirect('/book/search?query=' . $query .'&condition=' . $condition . '&offset=0&limit=' . $limit);
+			return $this->redirect('/book/search');
 		}
 
 		// GETメソッドの場合

@@ -12,19 +12,19 @@ class OasisApplication extends Application
 	protected function registerRoutes()
 	{
 		return array(
-			'/user'
-				=> array('controller' => 'user', 'action' => 'index'),
-			'/user/:action'
-				=> array('controller' => 'user'),
+			'/'
+				=> array('controller' => 'book', 'action' => 'search'),
+			'/book'
+				=> array('controller' => 'book', 'action' => 'search'),
+			'/book/:action'
+				=> array('controller' => 'book'),
 		);
 	}
 
 	protected function configure()
 	{
-		$this->db_manager->connect('master', array(
-			'dsn' => 'mysql:dbname=oasis;host=localhost',
-			'user' => 'oasis',
-			'password' => 'kr9zgzne',
-		));
+		require dirname(__FILE__) . '/config/database.php';
+
+		$this->db_manager->connect('master', $databaseConfig);
 	}
 }

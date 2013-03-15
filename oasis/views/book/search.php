@@ -17,7 +17,11 @@
 	</div>
 </div>
 <?php if(isset($bookDataList) && empty($bookDataList)): ?>
+<?php if(substr(time(), -1, 1) === '0'): ?>
+<h2 class="sorry"><img src="/img/common/icon/micky.png">ハハッ！その本なら夢の国にあるよ！</h2>
+<?php else: ?>
 <h2 class="sorry"><img src="/img/common/icon/sorry.png">ごめんなさい、お探しの本は見つかりませんでした。</h2>
+<?php endif; ?>
 <?php elseif(isset($bookDataList)): ?>
 <?php if(isset($bookDataList)): ?>
 <?php foreach($bookDataList as $i => $bookData): ?>
@@ -33,12 +37,6 @@
 				<dt>タイトル</dt>
 				<dd><span class="book_title"><a href="<?php echo $this->h($bookData['amazon_url']) ?>" target="_blank"><?php echo $this->h($bookData['title']) ?></a></span></dd>
 			</dl>
-			<div class="icon_list">
-				<span class="-btn -primary-" onclick="TINY.box.show({iframe: '<?php echo $base_url?>/book/inputShelf/<?php echo $this->h($bookData['id']) ?>', width: 700, height: 320, maskid: 'tinymask', boxid: 'frameless', animate: false, })">棚を移動</span>
-				<?php if($bookData['status'] === '1'): ?>
-					<span class="-btn -error-" onclick="TINY.box.show({iframe: '<?php echo $base_url?>/book/confirmDelete/<?php echo $this->h($bookData['id']) ?>', width: 700, height: 320, maskid: 'tinymask', boxid: 'frameless', animate: false, })">削除</span>
-				<?php endif; ?>
-			</div>
 		</div>
 		<div class="clearfix"></div>
 	</div>
