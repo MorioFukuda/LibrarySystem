@@ -38,7 +38,7 @@
 			<a href="<?php echo $base_url?>/book/search" class="js-tooltip" data-content='本を探す'><img src="/img/common/icon/search_1.png" class="rollover" alt="本を探す"></a>
 			<a href="<?php echo $base_url?>/book/inputByIsbn" class="js-tooltip" data-content='本の登録'><img src="/img/common/icon/input_1.png" class="rollover"></a>
 			<a href="<?php echo $base_url?>/book/inputShelfMulti" class="js-tooltip" data-content='本の移動'><img src="/img/common/icon/move_1.png" class="rollover"></a>
-			<a href="<?php echo $base_url?>/book/logout" class="js-tooltip" data-content='ログアウト'><img src="/img/common/icon/logout_1.png" class="rollover"></a>
+			<a href="<?php echo $base_url?>/account/signout" class="js-tooltip" data-content='ログアウト'><img src="/img/common/icon/logout_1.png" class="rollover"></a>
 		<!-- /div#navi --></div>
 	<!-- /div#header --></div>
 	<div id="contents_container">

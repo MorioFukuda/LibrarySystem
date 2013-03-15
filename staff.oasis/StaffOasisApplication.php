@@ -2,7 +2,7 @@
 
 class StaffOasisApplication extends Application
 {
-	protected $login_action = array('admin', 'signin');
+	protected $login_action = array('account', 'signin');
 
 	public function getRootDir()
 	{
@@ -13,9 +13,9 @@ class StaffOasisApplication extends Application
 	{
 		return array(
 			'/'
-				=> array('controller' => 'book', 'action' => 'index'),
+				=> array('controller' => 'book', 'action' => 'search'),
 			'/book'
-				=> array('controller' => 'book', 'action' => 'index'),
+				=> array('controller' => 'book', 'action' => 'search'),
 			'/book/confirmDelete/:bookId'
 				=> array('controller' => 'book', 'action' => 'confirmDelete'),
 			'/book/edit/:bookId'
@@ -26,15 +26,15 @@ class StaffOasisApplication extends Application
 				=> array('controller' => 'book', 'action' => 'inputShelf'),
 			'/book/:action'
 				=> array('controller' => 'book'),
+			'/account/:action'
+				=> array('controller' => 'account'),
 		);
 	}
 
 	protected function configure()
 	{
-		$this->db_manager->connect('master', array(
-			'dsn' => 'mysql:dbname=oasis;host=localhost',
-			'user' => 'oasis',
-			'password' => 'kr9zgzne',
-		));
+		require dirname(__FILE__) . '/../oasis/config/database.php';
+
+		$this->db_manager->connect('master', $databaseConfig);
 	}
 }

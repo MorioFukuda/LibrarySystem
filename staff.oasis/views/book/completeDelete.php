@@ -1,1 +1,1 @@
-<h2>削除しました。</h2>
+<h2 class="success"><img src="/img/common/icon/success.png">削除しました。</h2>

@@ -2,10 +2,27 @@
 
 class BookController extends Controller
 {
+
+	protected $auth_actions = array(
+		'index',
+		'input',
+		'save',
+		'inputByIsbn',
+		'saveByIsbn',
+		'getBookData',
+		'confirmDelete',
+		'delete',
+		'inputShelf',
+		'setShelf',
+		'search',
+		'getBookList',
+		'inputShelfMulti',
+		'setShelfMulti',
+	);
+
 	public function indexAction()
 	{
-		return $this->render(array(
-		));
+		return $this->render(array());
 	}
 
 	public function inputAction()
@@ -101,7 +118,7 @@ class BookController extends Controller
 
 		$token = $this->request->getPost('_token');
 		if(!$this->checkCsrfToken('book/inputByIsbn', $token)){
-			return $this->redirect('/book/inputByIsbn');
+			return $this->render(array(),'error');
 		}
 
 		$bookDataList = $this->request->getPost('book_list');
@@ -135,7 +152,8 @@ class BookController extends Controller
 		}
 
 		return $this->render(array(
-			'bookDataList' => $bookDataList
+			'bookDataList' => $bookDataList,
+			'shelfName' => $shelfName,
 		), 'saveByIsbn');
 	}
 
@@ -180,20 +198,20 @@ class BookController extends Controller
 			return $this->render(array(
 				'bookData' => $bookData,
 				'error' => '指定された書籍は既に削除済みです。',
-			), 'confirmDelete');
+			), 'confirmDelete', 'modal');
 		}
 
 		if(!$this->db_manager->get('Book')->isAvailable($bookId)){
 			return $this->render(array(
 				'bookData' => $bookData,
 				'error' => '指定された書籍は貸出中のため削除できません。',
-			), 'confirmDelete');
+			), 'confirmDelete', 'modal');
 		}
 
 		return $this->render(array(
 			'bookData' => $bookData,
 			'_token' => $this->generateCsrfToken('book/confirmDelete'),
-		), 'confirmDelete');
+		), 'confirmDelete', 'modal');
 	}
 
 	public function deleteAction()
@@ -204,12 +222,12 @@ class BookController extends Controller
 
 		$token = $this->request->getPost('_token');
 		if(!$this->checkCsrfToken('book/confirmDelete', $token)){
-			return $this->render(array(),'error');
+			return $this->render(array(),'error', 'modal');
 		}
 
 		$bookId = $this->request->getPost('book_id');
 		if($this->db_manager->get('Book')->hasEmpty($bookId)){
-			return $this->render(array(),'error');
+			return $this->render(array(),'error', 'modal');
 		}
 
 		$bookData = $this->db_manager->get('Book')->fetchById($bookId);
@@ -224,7 +242,7 @@ class BookController extends Controller
 
 		$this->db_manager->get('Book')->delete($bookId);
 
-		return $this->render(array(), 'completeDelete');
+		return $this->render(array(), 'completeDelete', 'modal');
 	}
 
 	public function inputShelfAction($params)
@@ -252,23 +270,23 @@ class BookController extends Controller
 	public function setShelfAction()
 	{
 		if(!$this->request->isPost()){
-			return $this->redirect('/book/inputShelf');
+			return $this->redirect('/book/inputShelf', 'modal');
 		}
 
 		$token = $this->request->getPost('_token');
 		if(!$this->checkCsrfToken('book/inputShelf', $token)){
-			return $this->render(array(),'error');
+			return $this->render(array(),'error', 'modal');
 		}
 
 		$bookId = $this->request->getPost('book_id');
 		if($this->db_manager->get('Book')->hasEmpty($bookId)){
-			return $this->render(array(),'error');
+			return $this->render(array(),'error', 'modal');
 		}
 
 		$bookData = $this->db_manager->get('Book')->fetchById($bookId);
 
 		if($bookData === false || $this->db_manager->get('Book')->isDeleted($bookId)){
-			return $this->render(array(), 'notFound');
+			return $this->render(array(), 'notFound', 'modal');
 		}		
 
 		$shelfName = $this->request->getPost('shelf_name');
@@ -278,7 +296,7 @@ class BookController extends Controller
 				'error' => '棚番号を入力してください。',
 				'shelfName' => $bookData['shelf_name'],
 				'_token' => $this->generateCsrfToken('book/inputShelf'),
-			), 'inputShelf');
+			), 'inputShelf', 'modal');
 		}
 
 		list($result, $shelfId) = $this->db_manager->get('Book')->validateShelfName($shelfName);
@@ -288,12 +306,12 @@ class BookController extends Controller
 				'error' => '正しくない棚番号です。',
 				'shelfName' => $shelfName,
 				'_token' => $this->generateCsrfToken('book/inputShelf'),
-			), 'inputShelf');
+			), 'inputShelf', 'modal');
 		}
 
 		$this->db_manager->get('Book')->updateShelfId($bookId, $shelfId);
 
-		return $this->render(array(), 'completeSetShelf');
+		return $this->render(array(), 'completeSetShelf', 'modal');
 	}
 
 	public function searchAction()

@@ -267,7 +267,7 @@ class BookRepository extends BaseRepository
 		$isbn = $this->convertToIsbn10($isbn);
 
 		//アクセスキーID、シークレットアクセスキー、トラッキングID
-		require dirname(__FILE__) . '/config.php';
+		require dirname(__FILE__) . '/../config/amazon.php';
 
 		//必要なパラメータ
 		$baseurl = 'http://ecs.amazonaws.jp/onca/xml';

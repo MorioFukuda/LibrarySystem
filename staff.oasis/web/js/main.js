@@ -94,6 +94,17 @@ $(function(){
 	//--------------------------------------
 	// ISBN書籍登録ページ
 	//--------------------------------------
+	$('input.delete').click(function(){
+		// 削除するhidden要素の番号を取得
+		num = $(this).attr('name');
+
+		// サムネイルを削除
+		$(this).parents('div.book_thumbnail').remove();
+
+		// nameにnumを含む全てのhidden要素を削除
+		$('input[name*="' + num + '"]').remove();
+	});
+					
 	$('input.isbn').change(function(){
 		isbnForm = $(this);
 
@@ -106,8 +117,12 @@ $(function(){
 			dataType: 'json',
 
 			beforeSend: function(){
-				// ローディングアニメーションの表示
-				$('img#loading').fadeIn(200);
+				$('div#book_list').prepend(''
+					+	'<div class="book_thumbnail effect8">'
+					+ '<img src="/img/common/loading.gif" alt="loadgin..." id="loading" />'
+					+ '</div>'
+				);
+				$('img#loading:first').fadeIn(200);
 
 				// 通信が終わるまでフォームを入力できないようにする
 				isbnForm.attr('disabled', 'disabled');
@@ -116,7 +131,7 @@ $(function(){
 
 			complete: function(){
 				// ローディングアニメーションを非表示に
-				$('img#loadgin').fadeOut();
+				$('img#loading').fadeOut();
 
 				// 通信が終わったらフォームをクリアして、入力できるようにする
 				isbnForm.val('');
@@ -129,21 +144,31 @@ $(function(){
 					// サーバー側でエラーを返したらアラートで表示
 					// バリデーションエラー、該当ISBN無し、通信エラー
 					alert(book.error);
+					$('div.book_thumbnail:first').fadeOut();
+					$('div.book_thumbnail:first').remove();
 				}else{
+					// ローディングアニメーションを非表示に
+					$('img#loading').fadeOut();
 
 					// hidden要素の名前用カウンタ
 					counter = parseInt($('input#counter').val());
 
 					// サムネイルを追加する
-					$('div#book_list').prepend(''
-						+ '<div class="book_thumbnail" style="display:none;">'
-						+ 	'<span class="book_title"><a href="' + book.amazonUrl + '" target="_blank">' + book.title + '</a></span><br />'
-						+		'<span class="book_author">' + book.author + '</span><br />'
-						+		'<img src="' + book.imageUrl + '" class="book_image"/><br />'
-						+ 	'<input type="button" class="delete" name="' + counter + '" value="削除">'
-						+ '</div>'
+					$('div.book_thumbnail:first').prepend(''
+						+ 	'<img src="' + book.imageUrl + '" class="book_image" onclick="TINY.box.show({image: "' + book.imageUrl + '", maskid: "tinymask", boxid: "frameless", animate: false, })" />'
+						+ 	'<div class="book_detail">'
+						+ 		'<dl>'
+						+ 			'<dt>収録棚<dt>'
+						+ 				'<dd><span class="shelf_name">ー</span></dd>'
+						+				'<dt>著者</dt>'
+						+					'<dd><span class="book_author">' + book.author + '</span></dd>'
+						+				'<dt>タイトル</dt>'
+						+					'<dd><span class="book_title"><a href="' + book.amazonUrl + '" target="_blank">' + book.title + '</a></span></dd>'
+						+			'</dl>'
+						+ 		'<input type="button" class="delete" name="' + counter + '" value="削除">'
+						+		'</div>'
+						+ 	'<div class="clearfix"></div>'
 					);
-					$('div.book_thumbnail:hidden').fadeIn();
 
 					// hidden要素に本の情報を格納
 					$('form#book_data').prepend(''
@@ -161,7 +186,7 @@ $(function(){
 						num = $(this).attr('name');
 
 						// サムネイルを削除
-						$(this).parent().remove();
+						$(this).parents('div.book_thumbnail').remove();
 
 						// nameにnumを含む全てのhidden要素を削除
 						$('input[name*="' + num + '"]').remove();

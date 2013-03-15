@@ -17,39 +17,27 @@
 	</div>
 </div>
 <?php if(isset($bookDataList) && empty($bookDataList)): ?>
-ごめんなさい、お探しの本は見つかりませんでした。
+<h2 class="sorry"><img src="/img/common/icon/sorry.png">ごめんなさい、お探しの本は見つかりませんでした。</h2>
 <?php elseif(isset($bookDataList)): ?>
 <?php if(isset($bookDataList)): ?>
 <?php foreach($bookDataList as $i => $bookData): ?>
 
 	<div class="book_thumbnail effect8">
-		<img src="<?php echo $this->h($bookData['image_url']) ?>" class="book_image"/>
+		<img src="<?php echo $this->h($bookData['image_url']) ?>" class="book_image" onclick="TINY.box.show({image: '<?php echo $this->h($bookData['image_url']) ?>', maskid: 'tinymask', boxid: 'frameless', animate: false, })"/>
 		<div class="book_detail">
 			<dl>
-				<dt>
-					収録棚
-				<dt>
-				<dd>
-					<span class="shelf_name"><?php echo $this->h($bookData['shelf_name'] )?></span>
-				</dd>
-
-				<dt>
-					著者
-				</dt>
-				<dd>
-					<span class="book_author"><?php echo $this->h($bookData['author']) ?></span>
-				</dd>
-
-				<dt>
-					タイトル
-				</dt>
-				<dd>
-				<span class="book_title"><a href="<?php echo $this->h($bookData['amazon_url']) ?>" target="_blank"><?php echo $this->h($bookData['title']) ?></a></span>
-				</dd>
+				<dt>収録棚<dt>
+				<dd><span class="shelf_name"><?php echo $this->h($bookData['shelf_name'] )?></span></dd>
+				<dt>著者</dt>
+				<dd><span class="book_author"><?php echo $this->h($bookData['author']) ?></span></dd>
+				<dt>タイトル</dt>
+				<dd><span class="book_title"><a href="<?php echo $this->h($bookData['amazon_url']) ?>" target="_blank"><?php echo $this->h($bookData['title']) ?></a></span></dd>
 			</dl>
 			<div class="icon_list">
-				<span class="-btn -primary-" onclick="TINY.box.show({iframe: '<?php echo $base_url?>/book/inputShelf/<?php echo $this->h($bookData['id']) ?>', width: 700, height: 400, maskid: 'tinymask', boxid: 'frameless', animate: false, })">棚を移動</span>
-				<span class="-btn -error-" onclick="TINY.box.show({iframe: '<?php echo $base_url?>/book/confirmDelete/<?php echo $this->h($bookData['id']) ?>', width: 700, height: 400, maskid: 'tinymask', boxid: 'frameless', animate: false, })">削除</span>
+				<span class="-btn -primary-" onclick="TINY.box.show({iframe: '<?php echo $base_url?>/book/inputShelf/<?php echo $this->h($bookData['id']) ?>', width: 700, height: 320, maskid: 'tinymask', boxid: 'frameless', animate: false, })">棚を移動</span>
+				<?php if($bookData['status'] === '1'): ?>
+					<span class="-btn -error-" onclick="TINY.box.show({iframe: '<?php echo $base_url?>/book/confirmDelete/<?php echo $this->h($bookData['id']) ?>', width: 700, height: 320, maskid: 'tinymask', boxid: 'frameless', animate: false, })">削除</span>
+				<?php endif; ?>
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -58,7 +46,18 @@
 <?php endforeach; ?>
 <?php endif; ?>
 <div class="clearfix"></div>
-<?php for($i=0; $i<=$resultNum; $i+=$limit): ?>
-<?php echo "<a href=\"{$base_url}/book/search?query={$query}&condition={$condition}&offset={$i}&limit={$limit}\">" ?><?php echo floor($i/10)+1 ?></a>
-<?php endfor; ?>
+
+<div id="pager">
+<table><tbody><tr>
+<?php
+for($i=0; $i<=$resultNum; $i+=$limit){
+	echo "<td>";
+	echo "<img src=\"/img/common/icon/pager-o-normal.png\"><br />";
+	echo "<a href=\"{$base_url}/book/search?query={$query}&condition={$condition}&offset={$i}&limit={$limit}\">" . (floor($i/$limit) + 1) . "</a>";
+	echo "</td>";
+}
+?>
+<td><img src="/img/common/icon/pager-asis.png"><br />　</td>
+</tr></tbody></table>
+</div>
 <?php endif; ?>

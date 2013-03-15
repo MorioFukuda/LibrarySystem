@@ -31,6 +31,9 @@
 
 </head>
 <body>
+<?php if(isset($title)):?>
+<h1 id="header"> <?php echo $this->h($title) ?></h1>
+<?php endif; ?>
 <div id="modal">
 	<?php echo $_content ?>
 </div>

@@ -24,6 +24,23 @@ h1.title img.line{
 	margin: 0 50px;
 }
 
+h2.sorry{
+	text-align: center;
+	margin: 80px 0 40px 0;
+}
+
+h2.sorry img{
+	margin-right: 30px;
+}
+
+form#login_form{
+	width: 800px;
+	padding: 30px;
+	background: #fff;
+	margin: 40px auto;
+	text-align: center;
+}
+
 div.box{
 	width:800px;
 	background: #FFF;
@@ -42,6 +59,18 @@ div.row{
 	margin: 0 auto;
 }
 
+div.book_list{
+	text-align: center;
+}
+
+form#book_data{
+	width: 500px;
+	padding: 10px 20px;
+	background: #fff;
+	margin: 0 auto;
+	text-align: center;
+}
+
 div.book_thumbnail{
 	width: 900px;
 	margin: 20px auto;
@@ -54,6 +83,7 @@ div.book_thumbnail img.book_image{
 	margin-left: 30px;
 	border: 1px solid #888;
 	height: 150px;
+	cursor: pointer;
 }
 
 div.book_detail{
@@ -81,12 +111,36 @@ div.book_detail div.icon_list img{
 	cursor: pointer;
 }
 
+div#pager{
+	width: 700px;
+	text-align: center;
+	margin: 50px auto 0 auto;
+}
+div#pager table{
+	margin: 0 auto;
+}
+div#pager td{
+	text-align: center;
+}
+
+div#move{
+	text-align: center;
+}
+div#move select{
+	min-width: 400px;
+}
+
 input{
 	margin: 20px 10px;
 }
 
 input[type="text"]{
 	width: 400px;
+	text-align: center;
+}
+
+input[name="shelf_name"], input[name="isbn"]{
+	width: 100px;
 	text-align: center;
 }
 
@@ -129,6 +183,8 @@ div#contents_container{
 
 img#loading{
 	display: none;
+	width: 126px;
+	margin: 20px 367px;
 }
 
 
