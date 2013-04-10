@@ -138,8 +138,8 @@ class BookController extends Controller
 				'_token' => $this->generateCsrfToken('book/inputByIsbn')
 		);
 
-		if($this->db_manager->get('Book')->hasEmpty($bookDataList, $shelfName, $shelfName1, $shelfName2, $shelfName3)){
-			$variables['error'] = '未入力の項目があります。';
+		if($this->db_manager->get('Book')->hasEmpty($bookDataList, $shelfName3)){
+			$variables['error'] = '未入力の項目があります。' . $shelfName;
 			return $this->render($variables, 'inputByIsbn');
 		}
 		
@@ -170,7 +170,7 @@ class BookController extends Controller
 		$this->response->setHttpHeader('Content-Type', 'text/javascript; charset=utf-8');
 
 		$isbn = $params['isbn'];
-		$isbn = preg_replace("/[^0-9]+/", "", $isbn);
+		$isbn = preg_replace("/[^(0-9|X)]+/", "", $isbn);
 
 		if(!$this->db_manager->get('Book')->validateIsbn($isbn)){
 			return $this->render(array(
@@ -401,7 +401,10 @@ class BookController extends Controller
 		}
 
 		$bookIdList = $this->request->getPost('book_id');
-		$shelfName = $this->request->getPost('shelf_name');
+		$shelfName1 = $this->request->getPost('shelf_name1');
+		$shelfName2 = $this->request->getPost('shelf_name2');
+		$shelfName3 = $this->request->getPost('shelf_name3');
+		$shelfName = $shelfName1 . '0' . $shelfName2 . $shelfName3;
 
 		$variables = array(
 			'error' => '',

@@ -40,7 +40,7 @@ $(function(){
 			$(this).val('');
 
 			$.ajax({
-				url: 'http://staff.oasis.local/book/getBookList?query=' + query,
+				url: '/book/getBookList?query=' + query,
 				type: 'GET',
 				dataType: 'json',
 				cache : false,
@@ -114,7 +114,7 @@ $(function(){
 		isbnForm.val(isbn);
 
 		$.ajax({
-			url: 'http://staff.oasis.local/book/getBookData/' + isbn,
+			url: '/book/getBookData/' + isbn,
 			type: "GET",
 			dataType: 'json',
 

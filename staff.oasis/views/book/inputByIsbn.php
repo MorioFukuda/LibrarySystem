@@ -1,6 +1,6 @@
 <?php $this->setLayoutVar('title', '本を登録する') ?>
 
-<form action="<?php echo $base_url ?>/book/saveByIsbn" method="post">
+<form action="<?php echo $base_url ?>/book/saveByIsbn" method="post" id="book_data">
 
 <input type="hidden" name="_token" value="<?php echo $this->h($_token) ?>" />
 
@@ -21,7 +21,7 @@
 
 <?php if(!empty($error)): ?>
 <div id="form_oneline" class="effect8">
-	<span class="-btn -error-">エラー：<?php echo $this->h($error) ?></span>
+	エラー：<?php echo $this->h($error) ?>
 </div>
 <?php endif;?>
 

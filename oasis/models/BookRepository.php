@@ -63,7 +63,7 @@ class BookRepository extends BaseRepository
 
 	public function validateCondition($condition)
 	{
-		if($condition !== 'AND' || $condition !== 'OR'){
+		if($condition !== 'AND' && $condition !== 'OR'){
 			return 'AND';
 		}
 

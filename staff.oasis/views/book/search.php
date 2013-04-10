@@ -50,10 +50,11 @@
 <div id="pager">
 <table><tbody><tr>
 <?php
-for($i=0; $i<=$resultNum; $i+=$limit){
+for($i=0; $i<$resultNum; $i+=$limit){
 	echo "<td>";
+	echo "<a href=\"{$base_url}/book/search?query={$query}&condition={$condition}&offset={$i}&limit={$limit}\">";
 	echo "<img src=\"/img/common/icon/pager-o-normal.png\"><br />";
-	echo "<a href=\"{$base_url}/book/search?query={$query}&condition={$condition}&offset={$i}&limit={$limit}\">" . (floor($i/$limit) + 1) . "</a>";
+	echo (floor($i/$limit) + 1) . "</a>";
 	echo "</td>";
 }
 ?>

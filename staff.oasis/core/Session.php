@@ -9,7 +9,7 @@ class Session
     {
         if (!self::$sessionStarted) {
 
-						session_cache_limiter('private_no_expire');
+						session_cache_limiter('no_expire');
 
             session_start();
 

@@ -126,7 +126,7 @@ div#pager td{
 div#move{
 	text-align: center;
 }
-div#move select{
+div#move select.book_list{
 	min-width: 400px;
 }
 
