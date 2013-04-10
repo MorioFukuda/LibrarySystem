@@ -20,7 +20,7 @@
 <?php endif; ?>
 
 <?php if(!empty($error)): ?>
-<div id="form_oneline" class="effect8">
+<div class="effect8 error_message">
 	エラー：<?php echo $this->h($error) ?>
 </div>
 <?php endif;?>

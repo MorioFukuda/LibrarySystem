@@ -73,7 +73,7 @@ class BookRepository extends BaseRepository
 	public function validateOffset($offset)
 	{
 		$offset = (int)$offset;
-		if(!is_int($offset)){
+		if(!is_int($offset) || empty($offset)){
 			return 0;
 		}
 

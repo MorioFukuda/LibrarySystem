@@ -32,6 +32,11 @@ $(function(){
 	//--------------------------------------
 	// 本棚一括変更ページ
 	//--------------------------------------
+	$('input#search_box').focus(function(){
+		$(this).val('');
+		$(this).css('color', '#000');
+	});
+
 	$('input#search_box').change(function(){
 		query = $(this).val();
 

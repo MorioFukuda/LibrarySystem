@@ -6,6 +6,7 @@
 		<input type="text" name="query" value="<?php echo $this->h($query) ?>" class="_big -form-field" /><br />
 		AND:<input type="radio" name="condition" value="AND" <?php if(empty($condition) ||$condition === 'AND') echo 'checked' ?>  class="_big -form-field" />
 		OR:<input type="radio" name="condition" value="OR" <?php if($condition === 'OR') echo 'checked' ?>  class="_big -form-field" />
+		<input type="hidden" name="offset" value="0">
 		<select type="select" name="limit" class="_big -form-field">
 			<option <?php if($limit === 10) echo 'selected' ?>>10</option>
 			<option <?php if($limit === 20) echo 'selected' ?>>20</option>

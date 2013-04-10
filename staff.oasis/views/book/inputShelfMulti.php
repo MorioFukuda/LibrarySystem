@@ -2,9 +2,11 @@
 
 <div id="move">
 <?php if(isset($error) && !empty($error)): ?>
-<span class="-btn -error-">エラー：<?php echo $this->h($error) ?></span><br />
+<div class="effect8 error_message">
+	エラー：<?php echo $this->h($error) ?>
+</div>
 <?php endif; ?>
-<input type="text" value="" id="search_box" />
+<input type="text" value="棚番号、書籍名、著者名、etc..." id="search_box" />
 <br />
 <select size="7" multiple id="candidate_list" class="book_list">
 </select>
@@ -13,12 +15,22 @@
 <input type="button" value="削除↑" id="remove_list" />
 <br />
 <select size="7" multiple id="book_list" class="book_list">
+<?php if(isset($bookDataList)): ?>
+	<?php foreach($bookDataList as $bookData): ?>
+		<option value="<?php echo $bookData['id'] ?>">【<?php echo $bookData['shelf_name']; ?>】<?php echo $bookData['title'] ?></option>
+	<?php endforeach; ?>
+<?php endif; ?>
 </select>
 <form action="<?php echo $base_url ?>/book/setShelfMulti" method="post">
 <input type="hidden" name="_token" value="<?php echo $this->h($_token) ?>" />
+<?php if(isset($bookDataList)): ?>
+	<?php foreach($bookDataList as $bookData): ?>
+	<input type="hidden" name="book_id[]" value="<?php echo $bookData['id']?>" />
+	<?php endforeach; ?>
+<?php endif; ?>
 <br />
 棚番号
-	<select type="select" name="shelf_name1" class="">
+	<select type="select" name="shelf_name1">
 		<option <?php if($shelfName1 === 'A') echo 'selected' ?>>A</option>
 		<option <?php if($shelfName1 === 'B') echo 'selected' ?>>B</option>
 		<option <?php if($shelfName1 === 'C') echo 'selected' ?>>C</option>

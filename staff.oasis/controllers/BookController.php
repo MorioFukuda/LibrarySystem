@@ -139,7 +139,7 @@ class BookController extends Controller
 		);
 
 		if($this->db_manager->get('Book')->hasEmpty($bookDataList, $shelfName3)){
-			$variables['error'] = '未入力の項目があります。' . $shelfName;
+			$variables['error'] = '未入力の項目があります。';
 			return $this->render($variables, 'inputByIsbn');
 		}
 		
@@ -417,6 +417,14 @@ class BookController extends Controller
 			return $this->render($variables, 'inputShelfMulti');
 		}
 
+		$bookDataList = array();
+
+		foreach($bookIdList as $bookId){
+			$bookDataList[] = $this->db_manager->get('Book')->fetchById($bookId);
+		}
+
+		$variables['bookDataList'] = $bookDataList;
+
 		if($this->db_manager->get('Book')->hasEmpty($shelfName)){
 			$variables['error'] = '棚番号を入力してください。';
 			return $this->render($variables, 'inputShelfMulti');
@@ -433,13 +441,9 @@ class BookController extends Controller
 			return $this->render($variables, 'inputShelfMulti');
 		}
 
-		$bookDataList = array();
-
 		foreach($bookIdList as $bookId){
 			$this->db_manager->get('Book')->updateShelfId($bookId, $shelfId);
-			$bookDataList[] = $this->db_manager->get('Book')->fetchById($bookId);
 		}
-
 		return $this->render(array(
 			'bookDataList' => $bookDataList,
 			'shelfName' => $shelfName
