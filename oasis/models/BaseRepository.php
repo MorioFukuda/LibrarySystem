@@ -2,6 +2,23 @@
 
 class BaseRepository extends DbRepository
 {
+	public function convertToIsbn10($isbn)
+	{
+		//ISBN-13だった場合、ISBN-10へ変換する
+		if(strlen($isbn) === 13){
+			$isbn = substr($isbn, 3, 9);
+			$checkDigit = 0;
+			for($i = 10; $i>1; $i--){
+				$checkDigit += (int)substr($isbn, 10-$i, 1) * $i;
+			}
+			$checkDigit = 11 - $checkDigit % 11;
+			if($checkDigit === 10) $checkDigit = 'X';
+			if($checkDigit === 11) $checkDigit = 0;
+			return $isbn . $checkDigit;
+		}
+		return $isbn;
+	}
+
 	public function createRandomString($length)
 	{
 		$charList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

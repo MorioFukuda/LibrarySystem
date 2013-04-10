@@ -105,7 +105,9 @@ class BookController extends Controller
 	public function inputByIsbnAction()
 	{
 		return $this->render(array(
-			'shelfName' => '',
+			'shelfName1' => '',
+			'shelfName2' => '',
+			'shelfName3' => '',
 			'_token' => $this->generateCsrfToken('book/inputByIsbn')
 		), 'inputByIsbn');
 	}
@@ -122,16 +124,21 @@ class BookController extends Controller
 		}
 
 		$bookDataList = $this->request->getPost('book_list');
-		$shelfName = $this->request->getPost('shelf_name');
+		$shelfName1 = $this->request->getPost('shelf_name1');
+		$shelfName2 = $this->request->getPost('shelf_name2');
+		$shelfName3 = $this->request->getPost('shelf_name3');
+		$shelfName = $shelfName1 . '0' . $shelfName2 . $shelfName3;
 
 		$variables = array(
 				'error' => '',
 				'bookDataList' => $bookDataList,
-				'shelfName' => $shelfName,
+				'shelfName1' => $shelfName1,
+				'shelfName2' => $shelfName2,
+				'shelfName3' => $shelfName3,
 				'_token' => $this->generateCsrfToken('book/inputByIsbn')
 		);
 
-		if($this->db_manager->get('Book')->hasEmpty($bookDataList, $shelfName)){
+		if($this->db_manager->get('Book')->hasEmpty($bookDataList, $shelfName, $shelfName1, $shelfName2, $shelfName3)){
 			$variables['error'] = '未入力の項目があります。';
 			return $this->render($variables, 'inputByIsbn');
 		}
@@ -163,6 +170,7 @@ class BookController extends Controller
 		$this->response->setHttpHeader('Content-Type', 'text/javascript; charset=utf-8');
 
 		$isbn = $params['isbn'];
+		$isbn = preg_replace("/[^0-9]+/", "", $isbn);
 
 		if(!$this->db_manager->get('Book')->validateIsbn($isbn)){
 			return $this->render(array(

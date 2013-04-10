@@ -145,6 +145,23 @@ class BookRepository extends BaseRepository
 		return $this->fetch($sql, array(':book_id' => $bookId));
 	}
 
+	public function fetchByIsbn($isbn)
+	{
+		$isbn = $this->convertToIsbn10($isbn);
+
+		$sql = "
+			SELECT
+				b.id, isbn, title, author, amazon_url, shelf_name, image_url, status, deleted
+			FROM
+				book as b
+			INNER JOIN shelf AS s ON shelf_id = s.id
+			WHERE
+				isbn = :isbn
+		";
+
+		return $this->fetchAll($sql, array(':isbn' => $isbn));
+	}
+
 	public function isDeleted($bookId)
 	{
 		$sql = "
@@ -240,23 +257,6 @@ class BookRepository extends BaseRepository
 // その他のメソッド
 //-----------------------------------------------------
 
-	public function convertToIsbn10($isbn)
-	{
-		//ISBN-13だった場合、ISBN-10へ変換する
-		if(strlen($isbn) === 13){
-			$isbn = substr($isbn, 3, 9);
-			$checkDigit = 0;
-			for($i = 10; $i>1; $i--){
-				$checkDigit += (int)substr($isbn, 10-$i, 1) * $i;
-			}
-			$checkDigit = 11 - $checkDigit % 11;
-			if($checkDigit === 10) $checkDigit = 'X';
-			if($checkDigit === 11) $checkDigit = 0;
-			return $isbn . $checkDigit;
-		}
-		return $isbn;
-	}
-
 	public function rfc3986_urlencode($str) {
 		return str_replace('%7E', '~', rawurlencode($str));
 	}
@@ -342,6 +342,10 @@ class BookRepository extends BaseRepository
 			}
 		}
 		$bookData['author'] = implode(', ', $authorList);
+
+		if(empty($bookData['author'])){
+			$bookData['author'] = '-';
+		}
 
 		return array(true, null, $bookData);
 	}

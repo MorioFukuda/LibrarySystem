@@ -110,6 +110,8 @@ $(function(){
 
 		// 入力されたISBNを取得
 		isbn = isbnForm.val();
+		isbn = isbn.replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)});
+		isbnForm.val(isbn);
 
 		$.ajax({
 			url: 'http://staff.oasis.local/book/getBookData/' + isbn,
@@ -137,6 +139,8 @@ $(function(){
 				isbnForm.val('');
 				isbnForm.removeAttr('disabled');
 				$('input#book_submit').removeAttr('disabled');
+				isbnForm.focus();
+
 			},
 
 			success: function(book) {
@@ -181,6 +185,7 @@ $(function(){
 
 					$('input#counter').val(counter + 1);
 
+					// 新たに追加された削除ボタンにも削除の機能をつける
 					$('input.delete').click(function(){
 						// 削除するhidden要素の番号を取得
 						num = $(this).attr('name');
@@ -194,6 +199,8 @@ $(function(){
 				}
 			},
 			error: function(){
+					$('div.book_thumbnail:first').fadeOut();
+					$('div.book_thumbnail:first').remove();
 				alert('通信に失敗しました。もう一度入力してください。');
 			}
 		});

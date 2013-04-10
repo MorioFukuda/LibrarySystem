@@ -18,6 +18,10 @@ class OasisApplication extends Application
 				=> array('controller' => 'book', 'action' => 'search'),
 			'/book/:action'
 				=> array('controller' => 'book'),
+			'/circulation/:action'
+				=> array('controller' => 'circulation'),
+			'/circulation/getBookData/:isbn'
+				=> array('controller' => 'circulation', 'action' => 'getBookData'),
 		);
 	}
 

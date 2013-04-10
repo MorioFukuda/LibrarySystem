@@ -63,11 +63,11 @@ div.book_list{
 	text-align: center;
 }
 
-form#book_data{
+div#form_oneline{
 	width: 500px;
-	padding: 10px 20px;
+	padding: 0 20px;
 	background: #fff;
-	margin: 0 auto;
+	margin: 0 auto 20px auto;
 	text-align: center;
 }
 
